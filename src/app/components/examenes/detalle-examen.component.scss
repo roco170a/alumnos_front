@@ -1,0 +1,157 @@
+.container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    margin-left: 10px;
+    color: #3f51b5;
+    font-weight: 500;
+  }
+}
+
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 16px;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+}
+
+.examen-card {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  
+  mat-card-header {
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .codigo-materia {
+    font-size: 14px;
+    color: #666;
+    margin: 4px 0;
+  }
+}
+
+.estado-container {
+  display: flex;
+  margin-top: 10px;
+}
+
+.estado-badge {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.estado-activo {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.estado-pendiente {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.estado-realizado {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.estado-cancelado {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.info-section {
+  margin-bottom: 30px;
+  
+  h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .observaciones {
+    margin-top: 15px;
+    white-space: pre-line;
+    color: #555;
+    line-height: 1.5;
+  }
+}
+
+.info-row {
+  display: flex;
+  margin: 12px 0;
+  
+  .info-label {
+    width: 150px;
+    min-width: 150px;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .info-value {
+    color: #333;
+  }
+}
+
+.info-group {
+  margin-bottom: 25px;
+}
+
+@media (min-width: 768px) {
+  .info-section {
+    display: flex;
+    gap: 40px;
+    
+    .info-group {
+      flex: 1;
+    }
+  }
+} 

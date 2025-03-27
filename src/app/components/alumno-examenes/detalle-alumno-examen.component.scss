@@ -1,0 +1,158 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #666;
+  }
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.detalle-card {
+  margin-bottom: 20px;
+}
+
+.info-section {
+  margin: 16px 0;
+
+  h3 {
+    color: #3f51b5;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+.info-label {
+  font-weight: 500;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.info-value {
+  font-size: 1rem;
+}
+
+.estado-badge {
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.estado-pendiente {
+  background-color: #e0e0e0;
+  color: #616161;
+}
+
+.estado-ausente {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+.estado-realizado {
+  background-color: #bbdefb;
+  color: #1565c0;
+}
+
+.estado-calificado {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.estado-aprobado {
+  background-color: #dcedc8;
+  color: #33691e;
+}
+
+.estado-reprobado {
+  background-color: #ffccbc;
+  color: #bf360c;
+}
+
+.calificacion {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+mat-card-actions {
+  padding: 16px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+// Media queries para responsive
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  mat-card-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+} 

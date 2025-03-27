@@ -1,0 +1,136 @@
+<div class="container">
+  <div class="loading-container" *ngIf="cargando">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando detalles del examen...</p>
+  </div>
+
+  <div class="error-container" *ngIf="hayError">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Ocurrió un error al cargar los detalles del examen. Intente nuevamente.</p>
+    <button mat-raised-button color="primary" (click)="cargarDetalleAlumnoExamen()">
+      <mat-icon>refresh</mat-icon> Reintentar
+    </button>
+  </div>
+
+  <div class="content-container" *ngIf="!cargando && !hayError && alumnoExamen">
+    <div class="header-actions">
+      <button mat-stroked-button (click)="volver()" matTooltip="Volver a la página anterior">
+        <mat-icon>arrow_back</mat-icon> Volver
+      </button>
+      
+      <div class="action-buttons">
+        <!-- Botones de acción según el estado -->
+        <ng-container *ngIf="alumnoExamen.estado === 'Pendiente'">
+          <button mat-raised-button color="primary" (click)="registrarAsistencia(true)" matTooltip="Marcar como presente">
+            <mat-icon>how_to_reg</mat-icon> Registrar Asistencia
+          </button>
+          <button mat-raised-button color="warn" (click)="registrarAsistencia(false)" matTooltip="Marcar como ausente">
+            <mat-icon>person_off</mat-icon> Registrar Ausencia
+          </button>
+        </ng-container>
+        
+        <ng-container *ngIf="alumnoExamen.estado === 'Realizado'">
+          <button mat-raised-button color="primary" (click)="abrirDialogoCalificacion()" matTooltip="Calificar el examen">
+            <mat-icon>grading</mat-icon> Calificar Examen
+          </button>
+        </ng-container>
+        
+        <button mat-stroked-button color="warn" (click)="confirmarEliminar()" matTooltip="Eliminar este registro">
+          <mat-icon>delete</mat-icon> Eliminar
+        </button>
+      </div>
+    </div>
+
+    <mat-card class="detalle-card">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon color="primary">assignment</mat-icon>
+        </div>
+        <mat-card-title>Examen de {{ alumnoExamen.nombreMateria }}</mat-card-title>
+        <mat-card-subtitle>
+          <span class="estado-badge" [ngClass]="getClaseEstado(alumnoExamen.estado)">
+            {{ alumnoExamen.estado || 'Pendiente' }}
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="info-section">
+          <h3>Información del Alumno</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Nombre:</span>
+              <span class="info-value">{{ alumnoExamen.nombreAlumno }} {{ alumnoExamen.apellidosAlumno }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email:</span>
+              <span class="info-value">{{ alumnoExamen.emailAlumno }}</span>
+            </div>
+            <div class="info-item" *ngIf="alumnoExamen.documentoAlumno">
+              <span class="info-label">Documento:</span>
+              <span class="info-value">{{ alumnoExamen.documentoAlumno }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-section">
+          <h3>Información del Examen</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Materia:</span>
+              <span class="info-value">{{ alumnoExamen.nombreMateria }} ({{ alumnoExamen.codigoMateria }})</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Tipo de Examen:</span>
+              <span class="info-value">{{ alumnoExamen.nombreTipoExamen }} ({{ alumnoExamen.ponderacionTipoExamen }}%)</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Fecha del Examen:</span>
+              <span class="info-value">{{ alumnoExamen.fechaExamen }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-section">
+          <h3>Resultado</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Estado:</span>
+              <span class="info-value estado-badge" [ngClass]="getClaseEstado(alumnoExamen.estado)">
+                {{ alumnoExamen.estado || 'Pendiente' }}
+              </span>
+            </div>
+            <div class="info-item" *ngIf="alumnoExamen.estado !== 'Pendiente'">
+              <span class="info-label">Fecha de Realización:</span>
+              <span class="info-value">{{ alumnoExamen.fechaRealizacionFormateada || 'No disponible' }}</span>
+            </div>
+            <div class="info-item" *ngIf="alumnoExamen.calificacion !== null && alumnoExamen.calificacion !== undefined">
+              <span class="info-label">Calificación:</span>
+              <span class="info-value calificacion">{{ alumnoExamen.calificacion }}</span>
+            </div>
+            <div class="info-item full-width" *ngIf="alumnoExamen.comentarios">
+              <span class="info-label">Comentarios:</span>
+              <span class="info-value">{{ alumnoExamen.comentarios }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions>
+        <button mat-button [routerLink]="['/alumnos', alumnoExamen.alumnoId]" matTooltip="Ver perfil del alumno">
+          <mat-icon>person</mat-icon> Ver Alumno
+        </button>
+        <button mat-button [routerLink]="['/examenes', alumnoExamen.examenId]" matTooltip="Ver detalles del examen">
+          <mat-icon>description</mat-icon> Ver Examen
+        </button>
+        <button mat-button [routerLink]="['/materias', alumnoExamen.materiaId]" matTooltip="Ver detalles de la materia">
+          <mat-icon>school</mat-icon> Ver Materia
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div> 

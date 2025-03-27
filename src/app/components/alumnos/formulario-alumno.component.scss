@@ -1,0 +1,59 @@
+.container {
+  padding: 20px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+  margin-bottom: 16px;
+}
+
+.col {
+  flex: 1;
+  padding: 0 10px;
+  min-width: 200px;
+}
+
+.col-full {
+  flex: 1 0 100%;
+  padding: 0 10px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  
+  p {
+    margin-top: 16px;
+    color: #6c757d;
+  }
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+  
+  .col {
+    flex: 1 0 100%;
+    margin-bottom: 8px;
+  }
+} 

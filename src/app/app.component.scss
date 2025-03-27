@@ -1,0 +1,39 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidenav-container {
+  flex: 1;
+  margin-top: 64px; /* Altura de la barra de herramientas */
+}
+
+.sidenav {
+  width: 225px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.sidenav-content {
+  overflow-x: hidden;
+}
+
+.content-container {
+  padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 600px) {
+  .sidenav {
+    width: 80%;
+  }
+  
+  .content-container {
+    padding: 12px;
+  }
+  
+  .sidenav-container {
+    margin-top: 56px; /* Altura de la barra de herramientas en móviles */
+  }
+}

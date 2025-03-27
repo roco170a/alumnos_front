@@ -1,0 +1,156 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    color: #3f51b5;
+    font-weight: 500;
+  }
+}
+
+.filter-card {
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.filter-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-select {
+  min-width: 180px;
+}
+
+.loading-container, .error-container, .empty-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 16px;
+  }
+}
+
+.table-container {
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.examenes-table {
+  width: 100%;
+}
+
+.examen-row {
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.materia-info, .tipo-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.materia-nombre, .tipo-nombre {
+  font-weight: 500;
+}
+
+.materia-codigo, .tipo-ponderacion {
+  font-size: 12px;
+  color: #666;
+}
+
+.estado-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.estado-activo {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.estado-pendiente {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.estado-realizado {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.estado-cancelado {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+
+  button {
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+td.mat-cell {
+  padding: 12px 16px;
+}
+
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+  }
+  
+  .filter-field, .filter-select {
+    width: 100%;
+  }
+  
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+} 

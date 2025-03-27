@@ -1,0 +1,184 @@
+<div class="container">
+  <div class="header-container">
+    <div class="back-button">
+      <button mat-icon-button routerLink="/programaciones" matTooltip="Volver a la lista">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <h1 *ngIf="programacion">Detalles de la Programación de Examen</h1>
+  </div>
+
+  <div class="loading-container" *ngIf="cargando">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando detalles de la programación...</p>
+  </div>
+
+  <div class="error-container" *ngIf="hayError">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Ocurrió un error al cargar los detalles de la programación. Intente nuevamente.</p>
+    <button mat-raised-button color="primary" (click)="cargarProgramacion()">
+      <mat-icon>refresh</mat-icon> Reintentar
+    </button>
+  </div>
+
+  <div class="content-container" *ngIf="programacion && !cargando && !hayError">
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" [routerLink]="['/programaciones/editar', programacionId]">
+        <mat-icon>edit</mat-icon> Editar
+      </button>
+      <button mat-raised-button color="warn" (click)="confirmarEliminar()">
+        <mat-icon>delete</mat-icon> Eliminar
+      </button>
+      <button 
+        mat-raised-button 
+        color="accent" 
+        [routerLink]="['/examenes/nuevo']" 
+        [queryParams]="{ programacionId: programacionId }"
+        matTooltip="Crear un nuevo examen para esta programación"
+      >
+        <mat-icon>add</mat-icon> Nuevo Examen
+      </button>
+    </div>
+
+    <mat-card class="programacion-card">
+      <mat-card-header>
+        <div class="header-info">
+          <div class="estado-container">
+            <span class="estado-badge" [ngClass]="getEstadoClass(programacion.estado)">
+              {{ programacion.estado }}
+            </span>
+          </div>
+          <div class="titulo-container">
+            <h2>{{ programacion.nombreMateria }}</h2>
+            <p class="codigo-materia">{{ programacion.codigoMateria }}</p>
+          </div>
+          <p class="profesor">Profesor: {{ programacion.profesorMateria }}</p>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-section">
+          <div class="info-group">
+            <h3>Información General</h3>
+            <mat-divider></mat-divider>
+            <div class="info-row">
+              <span class="info-label">Fecha:</span>
+              <span class="info-value">{{ programacion.fechaFormateada }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Hora de inicio:</span>
+              <span class="info-value">{{ programacion.horaInicioFormateada }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Duración:</span>
+              <span class="info-value">{{ programacion.duracionMinutos }} minutos</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Aula:</span>
+              <span class="info-value">{{ programacion.aula }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Estado:</span>
+              <span class="info-value">{{ programacion.estado }}</span>
+            </div>
+            <div class="info-row" *ngIf="programacion.cantidadExamenes !== undefined">
+              <span class="info-label">Exámenes creados:</span>
+              <span class="info-value">{{ programacion.cantidadExamenes }}</span>
+            </div>
+          </div>
+
+          <div class="info-group" *ngIf="programacion.instrucciones">
+            <h3>Instrucciones</h3>
+            <mat-divider></mat-divider>
+            <p class="instrucciones">{{ programacion.instrucciones }}</p>
+          </div>
+        </div>
+
+        <div class="info-section" *ngIf="programacion.materialRequerido">
+          <div class="info-group">
+            <h3>Material Requerido</h3>
+            <mat-divider></mat-divider>
+            <p class="material-requerido">{{ programacion.materialRequerido }}</p>
+          </div>
+        </div>
+
+        <!-- Exámenes asociados -->
+        <div class="examenes-section">
+          <h3>Exámenes Asociados</h3>
+          <mat-divider></mat-divider>
+
+          <div class="loading-examenes" *ngIf="cargandoExamenes">
+            <mat-spinner diameter="30"></mat-spinner>
+            <p>Cargando exámenes...</p>
+          </div>
+
+          <div *ngIf="!cargandoExamenes && examenes.length > 0">
+            <table mat-table [dataSource]="examenes" class="examenes-table">
+              <!-- Fecha de Realización -->
+              <ng-container matColumnDef="fechaRealizacion">
+                <th mat-header-cell *matHeaderCellDef>Fecha de Realización</th>
+                <td mat-cell *matCellDef="let examen">{{ examen.fechaRealizacionFormateada }}</td>
+              </ng-container>
+
+              <!-- Tipo de Examen -->
+              <ng-container matColumnDef="tipoExamen">
+                <th mat-header-cell *matHeaderCellDef>Tipo de Examen</th>
+                <td mat-cell *matCellDef="let examen">
+                  {{ examen.nombreTipoExamen }} ({{ examen.ponderacionTipoExamen }}%)
+                </td>
+              </ng-container>
+
+              <!-- Estado -->
+              <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let examen">
+                  <span class="estado-badge" [ngClass]="getEstadoClass(examen.estado)">
+                    {{ examen.estado }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- Acciones -->
+              <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                <td mat-cell *matCellDef="let examen" class="acciones-column">
+                  <button 
+                    mat-icon-button 
+                    color="primary" 
+                    [routerLink]="['/examenes', examen.id]"
+                    matTooltip="Ver detalles"
+                  >
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button 
+                    mat-icon-button 
+                    color="accent" 
+                    [routerLink]="['/examenes/editar', examen.id]"
+                    matTooltip="Editar"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="columnasMostradas"></tr>
+              <tr mat-row *matRowDef="let row; columns: columnasMostradas;"></tr>
+            </table>
+          </div>
+
+          <div class="no-examenes" *ngIf="!cargandoExamenes && examenes.length === 0">
+            <p>No hay exámenes asociados a esta programación.</p>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              [routerLink]="['/examenes/nuevo']" 
+              [queryParams]="{ programacionId: programacionId }"
+            >
+              <mat-icon>add</mat-icon> Crear Examen
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> 

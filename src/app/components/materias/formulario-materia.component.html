@@ -1,0 +1,95 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ titulo }}</mat-card-title>
+      <mat-card-subtitle>
+        Complete los datos de la materia
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (cargando) {
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Cargando datos...</p>
+        </div>
+      } @else {
+        <form [formGroup]="materiaForm" (ngSubmit)="guardar()">
+          <div class="row">
+            <div class="col">
+              <!-- Código -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Código</mat-label>
+                <input matInput formControlName="codigo" placeholder="Ingrese el código de la materia" required>
+                <mat-error *ngIf="codigoNoValido">
+                  El código es obligatorio
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-2">
+              <!-- Nombre -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre" placeholder="Ingrese el nombre de la materia" required>
+                <mat-error *ngIf="nombreNoValido">
+                  El nombre es obligatorio
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-2">
+              <!-- Profesor -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Profesor</mat-label>
+                <input matInput formControlName="profesor" placeholder="Ingrese el nombre del profesor" required>
+                <mat-error *ngIf="profesorNoValido">
+                  El profesor es obligatorio
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <!-- Créditos -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Créditos</mat-label>
+                <input matInput type="number" min="1" max="10" formControlName="creditos" required>
+                <mat-error *ngIf="creditosNoValido">
+                  Los créditos deben ser entre 1 y 10
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-full">
+              <!-- Descripción -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput formControlName="descripcion" placeholder="Ingrese la descripción de la materia" rows="4"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <!-- Activo -->
+              <mat-checkbox formControlName="activa" color="primary">
+                Materia activa
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button mat-button type="button" [routerLink]="['/materias']">Cancelar</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="materiaForm.invalid">
+              {{ botonAccion }}
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
+</div> 

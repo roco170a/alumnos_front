@@ -1,0 +1,41 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.application-title {
+  margin-left: 8px;
+  font-size: 20px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.user-name {
+  margin-left: 8px;
+}
+
+.language-selector {
+  font-size: 14px;
+}
+
+.mat-icon {
+  vertical-align: middle;
+}
+
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+} 

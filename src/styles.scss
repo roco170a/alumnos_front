@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Variables globales */
+:root {
+  --primary-color: #1976d2;
+  --accent-color: #ff4081;
+  --warn-color: #f44336;
+  --background-color: #f5f5f5;
+  --text-color: rgba(0, 0, 0, 0.87);
+}
+
+/* Estilos comunes para botones */
+.action-button {
+  margin-right: 8px;
+}
+
+/* Estilos para tablas responsivas */
+.mat-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Estilos para tarjetas */
+.mat-card {
+  margin-bottom: 16px;
+}

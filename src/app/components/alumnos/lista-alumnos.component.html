@@ -1,0 +1,112 @@
+<div class="container">
+
+  <div class="header-container">
+    <h1>Alumnos</h1>
+
+    <button 
+    mat-raised-button 
+    color="primary" 
+    [routerLink]="['/alumnos/nuevo']" 
+    matTooltip="Agregar nuevo alumno">
+    <mat-icon>add</mat-icon> Nuevo Alumno
+  </button>
+
+  </div>
+
+
+
+  <mat-card class="filter-card">
+          
+
+    <mat-card-content>
+      <div class="actions-container">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Buscar alumno</mat-label>
+          <input matInput (keyup)="aplicarFiltro($event)" placeholder="Nombre, documento o email">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        
+      </div>
+
+      
+    </mat-card-content>
+  </mat-card>
+
+
+  @if (cargando) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando datos...</p>
+    </div>
+  } @else if (alumnos.length === 0) {
+    <div class="empty-container">
+      <mat-icon class="empty-icon">people_outline</mat-icon>
+      <p>No hay alumnos registrados</p>
+      <button mat-raised-button color="primary" [routerLink]="['/alumnos/nuevo']">
+        Agregar Alumno
+      </button>
+    </div>
+  } @else {
+    <div class="table-container mat-elevation-z2">
+      <table mat-table [dataSource]="filtrarAlumnos()" matSort class="mat-elevation-z0 full-width-table">
+        
+        <!-- Nombre Completo Column -->
+        <ng-container matColumnDef="nombreCompleto">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Completo</th>
+          <td mat-cell *matCellDef="let alumno">{{ alumno.nombreCompleto }}</td>
+        </ng-container>
+
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td mat-cell *matCellDef="let alumno">{{ alumno.email }}</td>
+        </ng-container>
+
+        <!-- Teléfono Column -->
+        <ng-container matColumnDef="telefono">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</th>
+          <td mat-cell *matCellDef="let alumno">{{ alumno.telefono }}</td>
+        </ng-container>
+
+        <!-- Estado Column -->
+        <ng-container matColumnDef="activo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+          <td mat-cell *matCellDef="let alumno">
+            <span class="estado-badge" [class.activo]="alumno.activo" [class.inactivo]="!alumno.activo">
+              {{ alumno.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let alumno">
+            <button mat-icon-button [routerLink]="['/alumnos', alumno.id]" matTooltip="Ver detalles">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" [routerLink]="['/alumnos/editar', alumno.id]" matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminarAlumno(alumno.id)" matTooltip="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnasMostradas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnasMostradas;"></tr>
+      </table>
+
+      <mat-paginator 
+        [pageSizeOptions]="[5, 10, 25, 100]" 
+        showFirstLastButtons 
+        aria-label="Seleccionar página">
+      </mat-paginator>
+    </div>
+  }
+
+
+
+</div> 

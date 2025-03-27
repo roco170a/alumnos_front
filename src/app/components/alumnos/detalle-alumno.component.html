@@ -1,0 +1,130 @@
+<div class="container">
+  <div class="header">
+    <button mat-button [routerLink]="['/alumnos']" class="back-button">
+      <mat-icon>arrow_back</mat-icon> Volver a la lista
+    </button>
+  </div>
+
+  @if (cargando) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando datos del alumno...</p>
+    </div>
+  } @else if (error) {
+    <mat-card>
+      <mat-card-content>
+        <div class="error-container">
+          <mat-icon class="error-icon">error</mat-icon>
+          <p>Ha ocurrido un error al cargar los datos del alumno.</p>
+          <button mat-raised-button color="primary" [routerLink]="['/alumnos']">
+            Volver a la lista
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  } @else if (alumno) {
+    <div class="card-grid">
+      <mat-card class="main-card">
+        <mat-card-header>
+          <div mat-card-avatar class="avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+          <mat-card-title>{{ alumno.nombreCompleto }}</mat-card-title>
+          <mat-card-subtitle>
+            <mat-chip-set>
+              <mat-chip [color]="alumno.activo ? 'primary' : 'warn'" selected>
+                {{ alumno.activo ? 'Activo' : 'Inactivo' }}
+              </mat-chip>
+            </mat-chip-set>
+          </mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <div class="info-section">
+            <h3>Información Personal</h3>
+            
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Fecha de Nacimiento:</span>
+                <span class="info-value">{{ formatearFecha(alumno.fechaNacimiento) }}</span>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Edad:</span>
+                <span class="info-value">{{ alumno.edad }} años</span>
+              </div>
+            </div>
+          </div>
+          
+          <mat-divider></mat-divider>
+          
+          <div class="info-section">
+            <h3>Información de Contacto</h3>
+            
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ alumno.email }}</span>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Teléfono:</span>
+                <span class="info-value">{{ alumno.telefono || 'No registrado' }}</span>
+              </div>
+              
+              <div class="info-item full-width">
+                <span class="info-label">Dirección:</span>
+                <span class="info-value">{{ alumno.direccion || 'No registrada' }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+        
+        <mat-card-actions align="end">
+          <button mat-button color="warn" (click)="eliminarAlumno()">
+            <mat-icon>delete</mat-icon> Eliminar
+          </button>
+          <button mat-raised-button color="primary" [routerLink]="['/alumnos/editar', alumno.id]">
+            <mat-icon>edit</mat-icon> Editar
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      
+      <div class="related-cards">
+        <mat-card class="related-card">
+          <mat-card-header>
+            <mat-card-title>Materias</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="empty-message">
+              <mat-icon>book</mat-icon>
+              Consulte la sección de inscripciones para ver las materias del alumno.
+            </p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-button [routerLink]="['/inscripciones/alumno', alumno.id]">
+              Ver inscripciones
+            </button>
+          </mat-card-actions>
+        </mat-card>
+        
+        <mat-card class="related-card">
+          <mat-card-header>
+            <mat-card-title>Exámenes</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="empty-message">
+              <mat-icon>assignment</mat-icon>
+              Consulte la sección de exámenes para ver las evaluaciones del alumno.
+            </p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-button [routerLink]="['/alumno-examenes/alumno', alumno.id]">
+              Ver exámenes
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  }
+</div> 

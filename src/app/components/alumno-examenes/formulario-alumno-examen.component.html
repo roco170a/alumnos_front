@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="header-container">
+    <div class="back-button">
+      <button mat-icon-button routerLink="/alumno-examenes" matTooltip="Volver a la lista">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <h1>Inscribir Alumno en Examen</h1>
+  </div>
+  
+  <div class="loading-container" *ngIf="cargando">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Guardando...</p>
+  </div>
+
+  <div class="error-container" *ngIf="hayError">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Ocurrió un error al procesar la solicitud. Por favor, intente nuevamente.</p>
+  </div>
+
+  <mat-card class="form-card" *ngIf="!cargando">
+    <mat-card-content>
+      <form [formGroup]="formularioExamen" (ngSubmit)="guardarAlumnoExamen()">
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Alumno</mat-label>
+            <mat-select formControlName="alumnoId" required [disabled]="alumnoId !== undefined">
+              <mat-option *ngIf="cargandoAlumnos" disabled>Cargando alumnos...</mat-option>
+              <mat-option *ngFor="let alumno of alumnos" [value]="alumno.id">
+                {{ alumno.nombre }} {{ alumno.apellido }} 
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formularioExamen.get('alumnoId')?.hasError('required')">
+              El alumno es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Examen</mat-label>
+            <mat-select formControlName="examenId" required [disabled]="examenId !== undefined">
+              <mat-option *ngIf="cargandoExamenes" disabled>Cargando exámenes...</mat-option>
+              <mat-option *ngFor="let examen of examenes" [value]="examen.id">
+                {{ examen.nombreMateria }} ({{ examen.codigoMateria }}) - {{ examen.nombreTipoExamen }} - {{ examen.fechaRealizacionFormateada }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formularioExamen.get('examenId')?.hasError('required')">
+              El examen es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="estado" required>
+              <mat-option *ngFor="let estado of estados" [value]="estado">
+                {{ estado }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formularioExamen.get('estado')?.hasError('required')">
+              El estado es obligatorio
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Comentarios</mat-label>
+            <textarea 
+              matInput 
+              formControlName="comentarios" 
+              placeholder="Ingrese comentarios adicionales"
+              rows="4"
+            ></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="button" 
+            mat-stroked-button 
+            [routerLink]="['/alumno-examenes']"
+            [disabled]="cargando"
+          >
+            Cancelar
+          </button>
+          
+          <button 
+            type="submit" 
+            mat-raised-button 
+            color="primary"
+            [disabled]="formularioExamen.invalid || cargando"
+          >
+            <mat-icon>save</mat-icon> Guardar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

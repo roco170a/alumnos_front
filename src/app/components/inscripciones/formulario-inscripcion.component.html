@@ -1,0 +1,137 @@
+<div class="container">
+  <div class="header-container">
+    <div class="back-button">
+      <button mat-icon-button routerLink="/inscripciones" matTooltip="Volver a la lista">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <h1>{{ esNuevo ? 'Nueva Inscripción' : 'Editar Inscripción' }}</h1>
+  </div>
+
+  <div class="loading-container" *ngIf="cargando">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando inscripción...</p>
+  </div>
+
+  <div class="error-container" *ngIf="hayError">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Ocurrió un error al cargar los datos de la inscripción. Intente nuevamente.</p>
+    <button mat-raised-button color="primary" (click)="cargarInscripcion()">
+      <mat-icon>refresh</mat-icon> Reintentar
+    </button>
+  </div>
+
+  <div class="form-container" *ngIf="!cargando && !hayError">
+    <form [formGroup]="inscripcionForm" (ngSubmit)="guardar()">
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>Información de la Inscripción</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Alumno</mat-label>
+              <mat-select formControlName="alumnoId" required>
+                <mat-option *ngFor="let alumno of alumnos" [value]="alumno.id">
+                  {{ alumno.apellidoPaterno }}, {{ alumno.apellidoMaterno }} {{ alumno.nombre }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="inscripcionForm.get('alumnoId')?.hasError('required')">
+                El alumno es obligatorio
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Materia</mat-label>
+              <mat-select formControlName="materiaId" required>
+                <mat-option *ngFor="let materia of materias" [value]="materia.id">
+                  {{ materia.codigo }} - {{ materia.nombre }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="inscripcionForm.get('materiaId')?.hasError('required')">
+                La materia es obligatoria
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Fecha de Inscripción</mat-label>
+              <input 
+                matInput 
+                [matDatepicker]="picker" 
+                formControlName="fechaInscripcion"
+                required
+              >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="inscripcionForm.get('fechaInscripcion')?.hasError('required')">
+                La fecha de inscripción es obligatoria
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Período Académico</mat-label>
+              <mat-select formControlName="periodoAcademico" required>
+                <mat-option *ngFor="let periodo of periodosAcademicos" [value]="periodo">
+                  {{ periodo }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="inscripcionForm.get('periodoAcademico')?.hasError('required')">
+                El período académico es obligatorio
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Estado</mat-label>
+              <mat-select formControlName="estado" required>
+                <mat-option *ngFor="let estado of estadosInscripcion" [value]="estado">
+                  {{ estado }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="inscripcionForm.get('estado')?.hasError('required')">
+                El estado es obligatorio
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Nota Final</mat-label>
+              <input 
+                matInput 
+                type="number" 
+                formControlName="notaFinal"
+                min="0"
+                max="10"
+                step="0.1"
+                placeholder="Ingrese la nota final (si aplica)"
+              >
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="form-actions">
+          <button
+            mat-button
+            type="button"
+            (click)="cancelar()"
+            [disabled]="guardando"
+          >
+            Cancelar
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="inscripcionForm.invalid || guardando"
+          >
+            <mat-spinner *ngIf="guardando" diameter="20"></mat-spinner>
+            <span *ngIf="!guardando">Guardar</span>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+  </div>
+</div> 

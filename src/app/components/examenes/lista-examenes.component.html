@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="header-container">
+    <h1>Exámenes</h1>
+    <button mat-raised-button color="primary" routerLink="/examenes/nuevo">
+      <mat-icon>add</mat-icon> Nuevo Examen
+    </button>
+  </div>
+
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filter-container">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Buscar examen</mat-label>
+          <input matInput (keyup)="aplicarFiltro($event)" placeholder="Buscar por materia, tipo, etc.">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-select">
+          <mat-label>Filtrar por estado</mat-label>
+          <mat-select [(ngModel)]="estadoFiltro" (selectionChange)="cambiarFiltroEstado(estadoFiltro)">
+            <mat-option value="Activo">Activo</mat-option>
+            <mat-option value="Pendiente">Pendiente</mat-option>
+            <mat-option value="Realizado">Realizado</mat-option>
+            <mat-option value="Cancelado">Cancelado</mat-option>
+            <mat-option value="Todos">Todos</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-select">
+          <mat-label>Filtrar por materia</mat-label>
+          <mat-select [(ngModel)]="materiaIdFiltro" (selectionChange)="cambiarFiltroMateria()">
+            <mat-option [value]="undefined">Todas las materias</mat-option>
+            <mat-option *ngFor="let materia of materias" [value]="materia.id">
+              {{ materia.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="loading-container" *ngIf="cargando">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando exámenes...</p>
+  </div>
+
+  <div class="error-container" *ngIf="hayError">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Ocurrió un error al cargar los exámenes. Intente nuevamente.</p>
+    <button mat-raised-button color="primary" (click)="cargarExamenes()">
+      <mat-icon>refresh</mat-icon> Reintentar
+    </button>
+  </div>
+
+  <div class="table-container" *ngIf="!cargando && !hayError">
+    <div class="empty-data" *ngIf="examenes.length === 0">
+      <mat-icon color="primary">assignment_late</mat-icon>
+      <p>No se encontraron exámenes.</p>
+    </div>
+
+    <table *ngIf="examenes.length > 0" mat-table [dataSource]="dataSource" matSort class="examenes-table">
+      
+      <!-- Fecha Columna -->
+      <ng-container matColumnDef="fechaRealizacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+        <td mat-cell *matCellDef="let examen"> 
+          {{ examen.fechaRealizacionFormateada }}
+        </td>
+      </ng-container>
+
+      <!-- Materia Columna -->
+      <ng-container matColumnDef="materia">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Materia </th>
+        <td mat-cell *matCellDef="let examen"> 
+          <div class="materia-info">
+            <span class="materia-nombre">{{ examen.nombreMateria }}</span>
+            <span class="materia-codigo">{{ examen.codigoMateria }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Tipo Examen Columna -->
+      <ng-container matColumnDef="tipoExamen">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+        <td mat-cell *matCellDef="let examen"> 
+          <div class="tipo-info">
+            <span class="tipo-nombre">{{ examen.nombreTipoExamen }}</span>
+            <span class="tipo-ponderacion">Ponderación: {{ examen.ponderacionTipoExamen }}%</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Estado Columna -->
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+        <td mat-cell *matCellDef="let examen"> 
+          <span class="estado-badge" [ngClass]="'estado-' + examen.estado.toLowerCase()">
+            {{ examen.estado }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Inscripciones Columna -->
+      <ng-container matColumnDef="inscripciones">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Inscripciones </th>
+        <td mat-cell *matCellDef="let examen"> 
+          {{ examen.cantidadInscripciones }}
+        </td>
+      </ng-container>
+
+      <!-- Acciones Columna -->
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let examen">
+          <div class="action-buttons">
+            <button mat-icon-button color="accent" [routerLink]="['/examenes', examen.id]"
+              matTooltip="Ver detalles">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" [routerLink]="['/examenes/editar', examen.id]"
+              matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminarExamen(examen.id)" 
+              matTooltip="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnasMostradas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasMostradas;"
+          class="examen-row"
+          [routerLink]="['/examenes', row.id]"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+</div> 

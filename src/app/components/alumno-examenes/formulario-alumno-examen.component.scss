@@ -1,0 +1,78 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    color: #3f51b5;
+  }
+
+  .back-button {
+    margin-right: 16px;
+  }
+}
+
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #666;
+  }
+}
+
+.form-card {
+  padding: 24px;
+}
+
+.form-row {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+// Media queries para responsive
+@media (max-width: 768px) {
+  .form-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+  }
+} 

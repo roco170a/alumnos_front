@@ -1,0 +1,46 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="toggleMenu()" >
+    <mat-icon style="color: white;">menu</mat-icon>
+  </button>
+  <span class="application-title">Application</span>
+  <span class="spacer"></span>
+  
+  <!-- Selector de idioma -->
+  <button mat-button [matMenuTriggerFor]="languageMenu" class="language-selector">
+    <mat-icon>translate</mat-icon>
+    {{ currentLanguage }}
+  </button>
+  <mat-menu #languageMenu="matMenu">
+    <button mat-menu-item (click)="changeLanguage('English')">
+      <span>English</span>
+    </button>
+    <button mat-menu-item (click)="changeLanguage('Español')">
+      <span>Español</span>
+    </button>
+  </mat-menu>
+
+  <!-- Menú de usuario -->
+  <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu">
+    @if(usuario.avatar) {
+      <img [src]="usuario.avatar" class="user-avatar" alt="Usuario">
+    } @else {
+      <mat-icon>account_circle</mat-icon>
+    }
+    <span class="user-name">{{ usuario.nombre }}</span>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>person</mat-icon>
+      <span>Mi perfil</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      <span>Configuración</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Cerrar sesión</span>
+    </button>
+  </mat-menu>
+</mat-toolbar> 

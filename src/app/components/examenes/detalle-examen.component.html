@@ -1,0 +1,100 @@
+<div class="container">
+  <div class="header-container">
+    <div class="back-button">
+      <button mat-icon-button routerLink="/examenes" matTooltip="Volver a la lista">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <h1 *ngIf="examen">Detalles del Examen</h1>
+  </div>
+
+  <div class="loading-container" *ngIf="cargando">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando detalles del examen...</p>
+  </div>
+
+  <div class="error-container" *ngIf="hayError">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Ocurrió un error al cargar los detalles del examen. Intente nuevamente.</p>
+    <button mat-raised-button color="primary" (click)="cargarExamen()">
+      <mat-icon>refresh</mat-icon> Reintentar
+    </button>
+  </div>
+
+  <div class="content-container" *ngIf="examen && !cargando && !hayError">
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" [routerLink]="['/examenes/editar', examenId]">
+        <mat-icon>edit</mat-icon> Editar
+      </button>
+      <button mat-raised-button color="warn" (click)="confirmarEliminar()">
+        <mat-icon>delete</mat-icon> Eliminar
+      </button>
+    </div>
+
+    <mat-card class="examen-card">
+      <mat-card-header>
+        <div class="header-info">
+          <h2>{{ examen.nombreMateria }}</h2>
+          <p class="codigo-materia">{{ examen.codigoMateria }}</p>
+          <div class="estado-container">
+            <span class="estado-badge" [ngClass]="getEstadoClass()">
+              {{ examen.estado }}
+            </span>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-section">
+          <div class="info-group">
+            <h3>Información general</h3>
+            <mat-divider></mat-divider>
+            <div class="info-row">
+              <span class="info-label">Tipo de examen:</span>
+              <span class="info-value">{{ examen.nombreTipoExamen }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Ponderación:</span>
+              <span class="info-value">{{ examen.ponderacionTipoExamen }}%</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Fecha de realización:</span>
+              <span class="info-value">{{ examen.fechaRealizacionFormateada }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Profesor:</span>
+              <span class="info-value">{{ examen.profesorMateria }}</span>
+            </div>
+          </div>
+
+          <div class="info-group">
+            <h3>Detalles de programación</h3>
+            <mat-divider></mat-divider>
+            <div class="info-row">
+              <span class="info-label">Nombre:</span>
+              <span class="info-value">{{ examen.nombreProgramacion }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Aula:</span>
+              <span class="info-value">{{ examen.aula }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Duración:</span>
+              <span class="info-value">{{ examen.duracionMinutos }} minutos</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Estudiantes inscritos:</span>
+              <span class="info-value">{{ examen.cantidadInscripciones }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section" *ngIf="examen.observaciones">
+          <h3>Observaciones</h3>
+          <mat-divider></mat-divider>
+          <p class="observaciones">{{ examen.observaciones }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> 

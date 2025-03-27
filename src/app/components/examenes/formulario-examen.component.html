@@ -1,0 +1,126 @@
+<div class="container">
+  <div class="header-container">
+    <div class="back-button">
+      <button mat-icon-button routerLink="/examenes" matTooltip="Volver a la lista">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <h1>{{ esNuevo ? 'Nuevo Examen' : 'Editar Examen' }}</h1>
+  </div>
+
+  <div class="loading-container" *ngIf="cargando">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando examen...</p>
+  </div>
+
+  <div class="error-container" *ngIf="hayError">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Ocurrió un error al cargar los datos del examen. Intente nuevamente.</p>
+    <button mat-raised-button color="primary" (click)="cargarExamen()">
+      <mat-icon>refresh</mat-icon> Reintentar
+    </button>
+  </div>
+
+  <div class="form-container" *ngIf="!cargando && !hayError">
+    <form [formGroup]="examenForm" (ngSubmit)="guardar()">
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>Información del Examen</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Programación</mat-label>
+              <mat-select formControlName="programacionId" required>
+                <mat-option *ngFor="let prog of programaciones" [value]="prog.id">
+                  {{ prog.nombreMateria }} - {{ prog.fechaFormateada }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="examenForm.get('programacionId')?.hasError('required')">
+                La programación es obligatoria
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Tipo de Examen</mat-label>
+              <mat-select formControlName="tipoExamenId" required>
+                <mat-option *ngFor="let tipo of tiposExamen" [value]="tipo.id">
+                  {{ tipo.nombre }} ({{ tipo.ponderacion }}%)
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="examenForm.get('tipoExamenId')?.hasError('required')">
+                El tipo de examen es obligatorio
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Fecha de Realización</mat-label>
+              <input 
+                matInput 
+                [matDatepicker]="picker" 
+                formControlName="fechaRealizacion"
+                required
+              >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="examenForm.get('fechaRealizacion')?.hasError('required')">
+                La fecha de realización es obligatoria
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Estado</mat-label>
+              <mat-select formControlName="estado" required>
+                <mat-option *ngFor="let estado of estadosExamen" [value]="estado">
+                  {{ estado }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="examenForm.get('estado')?.hasError('required')">
+                El estado es obligatorio
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Observaciones</mat-label>
+              <textarea 
+                matInput 
+                formControlName="observaciones"
+                rows="4"
+                placeholder="Ingrese las observaciones del examen">
+              </textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row checkbox-row">
+            <mat-checkbox formControlName="activo">Activo</mat-checkbox>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="form-actions">
+          <button
+            mat-button
+            type="button"
+            (click)="cancelar()"
+            [disabled]="guardando"
+          >
+            Cancelar
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="examenForm.invalid || guardando"
+          >
+            <mat-spinner *ngIf="guardando" diameter="20"></mat-spinner>
+            <span *ngIf="!guardando">Guardar</span>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+  </div>
+</div> 

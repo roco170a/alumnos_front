@@ -1,0 +1,115 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ titulo }}</mat-card-title>
+      <mat-card-subtitle>
+        Complete los datos del alumno
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (cargando) {
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Cargando datos...</p>
+        </div>
+      } @else {
+        <form [formGroup]="alumnoForm" (ngSubmit)="guardar()">
+          <div class="row">
+            <div class="col">
+              <!-- Nombre -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre" placeholder="Ingrese el nombre" required>
+                <mat-error *ngIf="nombreNoValido">
+                  El nombre es obligatorio
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <!-- Apellido Paterno -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Apellido Paterno</mat-label>
+                <input matInput formControlName="apellidoPaterno" placeholder="Ingrese el apellido paterno" required>
+                <mat-error *ngIf="apellidoPaternoNoValido">
+                  El apellido paterno es obligatorio
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <!-- Apellido Materno -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Apellido Materno</mat-label>
+                <input matInput formControlName="apellidoMaterno" placeholder="Ingrese el apellido materno">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <!-- Fecha de Nacimiento -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Fecha de Nacimiento</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="fechaNacimientoNoValido">
+                  La fecha de nacimiento es obligatoria
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <!-- Email -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" placeholder="Ingrese el email" required type="email">
+                <mat-error *ngIf="emailNoValido">
+                  Ingrese un email válido
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <!-- Teléfono -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Teléfono</mat-label>
+                <input matInput formControlName="telefono" placeholder="Ingrese el teléfono">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-full">
+              <!-- Dirección -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Dirección</mat-label>
+                <input matInput formControlName="direccion" placeholder="Ingrese la dirección">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <!-- Activo -->
+              <mat-checkbox formControlName="activo" color="primary">
+                Alumno activo
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button mat-button type="button" [routerLink]="['/alumnos']">Cancelar</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="alumnoForm.invalid">
+              {{ botonAccion }}
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
+</div> 

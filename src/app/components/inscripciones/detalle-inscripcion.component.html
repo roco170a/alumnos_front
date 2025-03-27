@@ -1,0 +1,128 @@
+<div class="container">
+  <div class="header-container">
+    <div class="back-button">
+      <button mat-icon-button routerLink="/inscripciones" matTooltip="Volver a la lista">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <h1 *ngIf="inscripcion">Detalles de la Inscripción</h1>
+  </div>
+
+  <div class="loading-container" *ngIf="cargando">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando detalles de la inscripción...</p>
+  </div>
+
+  <div class="error-container" *ngIf="hayError">
+    <mat-icon color="warn">error</mat-icon>
+    <p>Ocurrió un error al cargar los detalles de la inscripción. Intente nuevamente.</p>
+    <button mat-raised-button color="primary" (click)="cargarInscripcion()">
+      <mat-icon>refresh</mat-icon> Reintentar
+    </button>
+  </div>
+
+  <div class="content-container" *ngIf="inscripcion && !cargando && !hayError">
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" [routerLink]="['/inscripciones/editar', inscripcionId]">
+        <mat-icon>edit</mat-icon> Editar
+      </button>
+      <button mat-raised-button color="warn" (click)="confirmarEliminar()">
+        <mat-icon>delete</mat-icon> Eliminar
+      </button>
+    </div>
+
+    <mat-card class="inscripcion-card">
+      <mat-card-header>
+        <div class="header-info">
+          <div class="estado-container">
+            <span class="estado-badge" [ngClass]="getEstadoClass()">
+              {{ inscripcion.estado }}
+            </span>
+          </div>
+          <h2>Inscripción #{{ inscripcion.id }}</h2>
+          <p class="fecha-inscripcion">Fecha: {{ inscripcion.fechaInscripcionFormateada }}</p>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-section">
+          <div class="info-group">
+            <h3>Información del Alumno</h3>
+            <mat-divider></mat-divider>
+            <div class="info-row">
+              <span class="info-label">Nombre:</span>
+              <span class="info-value">
+                <a [routerLink]="['/alumnos', inscripcion.alumnoId]">
+                  {{ inscripcion.nombreAlumno }} {{ inscripcion.apellidosAlumno }}
+                </a>
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">ID:</span>
+              <span class="info-value">{{ inscripcion.alumnoId }}</span>
+            </div>
+          </div>
+
+          <div class="info-group">
+            <h3>Información de la Materia</h3>
+            <mat-divider></mat-divider>
+            <div class="info-row">
+              <span class="info-label">Nombre:</span>
+              <span class="info-value">
+                <a [routerLink]="['/materias', inscripcion.materiaId]">
+                  {{ inscripcion.nombreMateria }}
+                </a>
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Código:</span>
+              <span class="info-value">{{ inscripcion.codigoMateria }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">ID:</span>
+              <span class="info-value">{{ inscripcion.materiaId }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section additional-info">
+          <div class="info-group">
+            <h3>Detalles adicionales</h3>
+            <mat-divider></mat-divider>
+            <div class="info-row">
+              <span class="info-label">Periodo académico:</span>
+              <span class="info-value">{{ inscripcion.periodoAcademico }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Estado:</span>
+              <span class="info-value">{{ inscripcion.estado }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Nota final:</span>
+              <span class="info-value">{{ inscripcion.notaFinal || 'Pendiente' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="buttons-container">
+          <button 
+            mat-button 
+            color="primary" 
+            [routerLink]="['/inscripciones/alumno', inscripcion.alumnoId]"
+            matTooltip="Ver todas las inscripciones de este alumno"
+          >
+            <mat-icon>person</mat-icon> Ver inscripciones del alumno
+          </button>
+          <button 
+            mat-button 
+            color="primary" 
+            [routerLink]="['/inscripciones/materia', inscripcion.materiaId]"
+            matTooltip="Ver todas las inscripciones de esta materia"
+          >
+            <mat-icon>book</mat-icon> Ver inscripciones de la materia
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> 

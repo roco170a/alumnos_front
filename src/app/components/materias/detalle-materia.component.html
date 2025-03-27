@@ -1,0 +1,142 @@
+<div class="container">
+  <div class="header">
+    <button mat-button [routerLink]="['/materias']" class="back-button">
+      <mat-icon>arrow_back</mat-icon> Volver a la lista
+    </button>
+  </div>
+
+  @if (cargando) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando datos de la materia...</p>
+    </div>
+  } @else if (error) {
+    <mat-card>
+      <mat-card-content>
+        <div class="error-container">
+          <mat-icon class="error-icon">error</mat-icon>
+          <p>Ha ocurrido un error al cargar los datos de la materia.</p>
+          <button mat-raised-button color="primary" [routerLink]="['/materias']">
+            Volver a la lista
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  } @else if (materia) {
+    <div class="card-grid">
+      <mat-card class="main-card">
+        <mat-card-header>
+          <div mat-card-avatar class="avatar">
+            <mat-icon>book</mat-icon>
+          </div>
+          <mat-card-title>{{ materia.nombre }}</mat-card-title>
+          <mat-card-subtitle>
+            <mat-chip-set>
+              <mat-chip [color]="materia.activa ? 'primary' : 'warn'" selected>
+                {{ materia.activa ? 'Activo' : 'Inactivo' }}
+              </mat-chip>
+            </mat-chip-set>
+          </mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <div class="info-section">
+            <h3>Información General</h3>
+            
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Código:</span>
+                <span class="info-value">{{ materia.codigo }}</span>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Profesor:</span>
+                <span class="info-value">{{ materia.profesor }}</span>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Créditos:</span>
+                <span class="info-value">{{ materia.creditos }}</span>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Fecha de creación:</span>
+                <span class="info-value">{{ formatearFecha(materia.fechaCreacion) }}</span>
+              </div>
+            </div>
+
+            @if (materia.descripcion) {
+              <div class="info-item full-width descripcion">
+                <span class="info-label">Descripción:</span>
+                <span class="info-value">{{ materia.descripcion }}</span>
+              </div>
+            }
+          </div>
+          
+          <mat-divider></mat-divider>
+          
+          <div class="info-section">
+            <h3>Estadísticas</h3>
+            
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-value">{{ materia.cantidadInscripciones }}</div>
+                <div class="stat-label">Alumnos inscritos</div>
+              </div>
+              
+              <div class="stat-item">
+                <div class="stat-value">{{ materia.cantidadExamenes }}</div>
+                <div class="stat-label">Exámenes</div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+        
+        <mat-card-actions align="end">
+          <button mat-button color="warn" (click)="eliminarMateria()">
+            <mat-icon>delete</mat-icon> Eliminar
+          </button>
+          <button mat-raised-button color="primary" [routerLink]="['/materias/editar', materia.id]">
+            <mat-icon>edit</mat-icon> Editar
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      
+      <div class="related-cards">
+        <mat-card class="related-card">
+          <mat-card-header>
+            <mat-card-title>Alumnos Inscritos</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="empty-message">
+              <mat-icon>people</mat-icon>
+              Consulte la sección de inscripciones para ver los alumnos inscritos en esta materia.
+            </p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-button [routerLink]="['/inscripciones/materia', materia.id]">
+              Ver inscripciones
+            </button>
+          </mat-card-actions>
+        </mat-card>
+        
+        <mat-card class="related-card">
+          <mat-card-header>
+            <mat-card-title>Exámenes</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="empty-message">
+              <mat-icon>assignment</mat-icon>
+              Consulte la sección de exámenes para ver las evaluaciones de esta materia.
+            </p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-button [routerLink]="['/programaciones/materia', materia.id]">
+              Ver exámenes
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  }
+</div> 
